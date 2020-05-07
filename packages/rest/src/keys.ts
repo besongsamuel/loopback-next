@@ -13,7 +13,7 @@ import {ErrorWriterOptions} from 'strong-error-handler';
 import {BodyParser, RequestBodyParser} from './body-parsers';
 import {HttpHandler} from './http-handler';
 import {RestServer} from './rest.server';
-import {RestRouter, RestRouterOptions} from './router';
+import {ResolvedRoute, RestRouter, RestRouterOptions} from './router';
 import {SequenceHandler} from './sequence';
 import {
   AjvFactory,
@@ -22,6 +22,7 @@ import {
   GetFromContext,
   InvokeMethod,
   LogError,
+  OperationArgs,
   ParseParams,
   Reject,
   Request,
@@ -224,6 +225,16 @@ export namespace RestBindings {
     );
   }
 
+  export namespace Operation {
+    export const ROUTE = BindingKey.create<ResolvedRoute>(
+      'rest.operation.route',
+    );
+
+    export const PARAMS = BindingKey.create<OperationArgs>(
+      'rest.operation.params',
+    );
+  }
+
   /**
    * Binding key for setting and injecting a wrapper function for retrieving
    * values from a given context
@@ -295,4 +306,6 @@ export namespace RestTags {
 
   export const AJV_KEYWORD = 'ajvKeyword';
   export const AJV_FORMAT = 'ajvFormat';
+
+  export const REST_MIDDLEWARE_CHAIN = 'middlewareChain.rest';
 }
