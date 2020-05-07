@@ -149,6 +149,8 @@ export class MiddlewareSequence implements SequenceHandler {
             'apiSpec',
             'middleware',
 
+            'authentication',
+
             // rest
             'findRoute',
             'parseParams',
