@@ -29,13 +29,17 @@ import {RawBodyParser} from './body-parsers/body-parser.raw';
 import {RestBindings} from './keys';
 import {
   BindElementProvider,
-  FindRouteProvider,
   GetFromContextProvider,
+  FindRouteMiddlewareProvider,
+  FindRouteProvider,
+  InvokeMethodMiddlewareProvider,
   InvokeMethodProvider,
   LogErrorProvider,
+  ParseParamsMiddlewareProvider,
   ParseParamsProvider,
   RejectProvider,
   SendProvider,
+  SendResponseMiddlewareProvider,
 } from './providers';
 import {
   createBodyParserBinding,
@@ -90,6 +94,8 @@ export class RestComponent implements Component {
     ),
     createBindingFromClass(InfoSpecEnhancer),
     createBindingFromClass(ConsolidationEnhancer),
+
+    ...getRestMiddlewareBindings(),
   ];
   servers: {
     [name: string]: Constructor<Server>;
@@ -109,6 +115,15 @@ export class RestComponent implements Component {
     }
     app.bind(RestBindings.API_SPEC).to(apiSpec);
   }
+}
+
+function getRestMiddlewareBindings() {
+  return [
+    SendResponseMiddlewareProvider,
+    FindRouteMiddlewareProvider,
+    ParseParamsMiddlewareProvider,
+    InvokeMethodMiddlewareProvider,
+  ].map(cls => createBindingFromClass(cls));
 }
 
 // TODO(kevin): Extend this interface def to include multiple servers?
